@@ -1,0 +1,1251 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Restaurant</title>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .language-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            background-color: var(--light-color);
+        }
+        
+        .tab-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #219955;
+        }
+        
+        .btn-excel {
+            background-color: #1d6f42;
+        }
+        
+        .btn-excel:hover {
+            background-color: #165a34;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .card h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .card.revenus p {
+            color: var(--success-color);
+        }
+        
+        .card.depenses p {
+            color: var(--accent-color);
+        }
+        
+        .report-actions {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+        }
+        /* Style pour le widget Google Translate */
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+body {
+    top: 0 !important;
+}
+#google_translate_element {
+    z-index: 1000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.goog-te-combo {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: white;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="google_translate_element" class="language-buttons"></div>
+            <h1>Gestion Comptable Restaurant</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="dashboard">Tableau de Bord</button>
+            <button class="tab-btn" data-tab="depenses">Dépenses</button>
+            <button class="tab-btn" data-tab="revenus">Revenus</button>
+            <button class="tab-btn" data-tab="employes">Employés</button>
+            <button class="tab-btn" data-tab="rapports">Rapports</button>
+        </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2>Tableau de Bord</h2>
+            
+            <div class="dashboard-cards">
+                <div class="card revenus">
+                    <h3>Total Revenus</h3>
+                    <p id="total-revenus">0.00 MAD</p>
+                </div>
+                
+                <div class="card depenses">
+                    <h3>Total Dépenses</h3>
+                    <p id="total-depenses">0.00 MAD</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Bénéfice Net</h3>
+                    <p id="benefice-net">0.00 MAD</p>
+                </div>
+            </div>
+            
+            <div class="recent-activity">
+                <h3>Activité Récente <button class="btn-danger" onclick="clearRecentActivities()" style="float: right; padding: 5px 10px; font-size: 0.8rem;">Effacer tout</button></h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Montant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-activity">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Dépenses Tab -->
+        <div id="depenses" class="tab-content">
+            <h2>Gestion des Dépenses</h2>
+            
+            <div class="form-container">
+                <h3>Ajouter une Dépense</h3>
+                <form id="depense-form">
+                    <div class="form-group">
+                        <label for="depense-type">Type</label>
+                        <select id="depense-type" required>
+                            <option value="">Sélectionner un type</option>
+                            <option value="Nourriture">Nourriture</option>
+                            <option value="Boissons">Boissons</option>
+                            <option value="Salaire">Salaire</option>
+                            <option value="Électricité">Électricité</option>
+                            <option value="Eau">Eau</option>
+                            <option value="Gaz">Gaz</option>
+                            <option value="Loyer">Loyer</option>
+                            <option value="Équipement">Équipement</option>
+                            <option value="Ménage">Ménage</option>
+                            <option value="Publicité">Publicité</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depense-montant">Montant (MAD)</label>
+                        <input type="number" id="depense-montant" step="0.01" min="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depense-date">Date</label>
+                        <input type="date" id="depense-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depense-description">Description</label>
+                        <textarea id="depense-description"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-success">Enregistrer</button>
+                </form>
+            </div>
+            
+            <div class="depenses-list">
+                <h3>Liste des Dépenses</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Montant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="depenses-list">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Revenus Tab -->
+        <div id="revenus" class="tab-content">
+            <h2>Gestion des Revenus</h2>
+            
+            <div class="form-container">
+                <h3>Ajouter un Revenu</h3>
+                <form id="revenu-form">
+                    <div class="form-group">
+                        <label for="revenu-type">Type</label>
+                        <select id="revenu-type" required>
+                            <option value="">Sélectionner un type</option>
+                            <option value="Vente nourriture">Vente nourriture</option>
+                            <option value="Vente boissons">Vente boissons</option>
+                            <option value="Pourboires">Pourboires</option>
+                            <option value="Catering">Catering</option>
+                            <option value="Événementiel">Événementiel</option>
+                            <option value="Subventions">Subventions</option>
+                            <option value="Autres revenus">Autres revenus</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenu-montant">Montant (MAD)</label>
+                        <input type="number" id="revenu-montant" step="0.01" min="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenu-date">Date</label>
+                        <input type="date" id="revenu-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenu-description">Description</label>
+                        <textarea id="revenu-description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenu-mode-paiement">Mode de Paiement</label>
+                        <select id="revenu-mode-paiement">
+                            <option value="Espèces">Espèces</option>
+                            <option value="Carte bancaire">Carte bancaire</option>
+                            <option value="Chèque">Chèque</option>
+                            <option value="Virement">Virement</option>
+                            <option value="Mobile payment">Mobile payment</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="revenu-declare-fisc" checked>
+                            Déclaré fiscalement
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn-success">Enregistrer</button>
+                </form>
+            </div>
+            
+            <div class="revenus-list">
+                <h3>Liste des Revenus</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Montant</th>
+                            <th>Mode Paiement</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="revenus-list">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Employés Tab -->
+        <div id="employes" class="tab-content">
+            <h2>Gestion des Employés</h2>
+            
+            <div class="form-container">
+                <h3>Ajouter un Employé</h3>
+                <form id="employe-form">
+                    <div class="form-group">
+                        <label for="employe-nom">Nom</label>
+                        <input type="text" id="employe-nom" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-prenom">Prénom</label>
+                        <input type="text" id="employe-prenom" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-salaire">Salaire (MAD)</label>
+                        <input type="number" id="employe-salaire" step="0.01" min="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-poste">Poste</label>
+                        <select id="employe-poste">
+                            <option value="Serveur">Serveur</option>
+                            <option value="Cuisinier">Cuisinier</option>
+                            <option value="Chef cuisinier">Chef cuisinier</option>
+                            <option value="Barman">Barman</option>
+                            <option value="Gérant">Gérant</option>
+                            <option value="Plongeur">Plongeur</option>
+                            <option value="Livreur">Livreur</option>
+                            <option value="Réceptionniste">Réceptionniste</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-date-embauche">Date d'Embauche</label>
+                        <input type="date" id="employe-date-embauche" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-email">Email</label>
+                        <input type="email" id="employe-email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employe-telephone">Téléphone</label>
+                        <input type="tel" id="employe-telephone">
+                    </div>
+                    
+                    <button type="submit" class="btn-success">Enregistrer</button>
+                </form>
+            </div>
+            
+            <div class="employes-list">
+                <h3>Liste des Employés</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Poste</th>
+                            <th>Salaire</th>
+                            <th>Date Embauche</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employes-list">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Rapports Tab -->
+        <div id="rapports" class="tab-content">
+            <h2>Rapports Financiers</h2>
+            
+            <div class="rapport-filters">
+                <h3>Générer un Rapport</h3>
+                <form id="rapport-form">
+                    <div class="form-group">
+                        <label for="rapport-type">Type de Rapport</label>
+                        <select id="rapport-type">
+                            <option value="mensuel">Mensuel</option>
+                            <option value="trimestriel">Trimestriel</option>
+                            <option value="annuel">Annuel</option>
+                            <option value="personnalise">Personnalisé</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="date-range-group" style="display: none;">
+                        <label for="rapport-date-debut">Date de Début</label>
+                        <input type="date" id="rapport-date-debut">
+                        
+                        <label for="rapport-date-fin">Date de Fin</label>
+                        <input type="date" id="rapport-date-fin">
+                    </div>
+                    
+                    <button type="submit" class="btn-success">Générer Rapport</button>
+                </form>
+            </div>
+            
+            <div class="rapport-result" id="rapport-result">
+                <!-- Rapport will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for the application
+        // Data storage
+        let expenses = [];
+        let revenues = [];
+        let employees = [];
+        let activities = [];
+
+        // Update activities from expenses and revenues
+        function updateActivities() {
+            activities = [
+                ...expenses.map(e => ({ 
+                    id: e.id, 
+                    type: "Dépense", 
+                    amount: e.amount, 
+                    date: e.date, 
+                    description: e.description,
+                    activityType: 'expense'
+                })),
+                ...revenues.map(r => ({ 
+                    id: r.id, 
+                    type: "Revenu", 
+                    amount: r.amount, 
+                    date: r.date, 
+                    description: r.description,
+                    activityType: 'revenue'
+                }))
+            ].sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        // Update all UI elements with current data
+        function updateUI() {
+            updateDashboard();
+            updateExpensesList();
+            updateRevenuesList();
+            updateEmployeesList();
+            updateRecentActivity();
+        }
+
+        // Update dashboard metrics
+        function updateDashboard() {
+            const totalRevenue = revenues.reduce((sum, revenue) => sum + revenue.amount, 0);
+            const totalExpense = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const netProfit = totalRevenue - totalExpense;
+            
+            document.getElementById('total-revenus').textContent = totalRevenue.toFixed(2) + ' MAD';
+            document.getElementById('total-depenses').textContent = totalExpense.toFixed(2) + ' MAD';
+            document.getElementById('benefice-net').textContent = netProfit.toFixed(2) + ' MAD';
+        }
+
+        // Update recent activity table
+        function updateRecentActivity() {
+            updateActivities();
+            const activityTable = document.getElementById('recent-activity');
+            activityTable.innerHTML = '';
+            
+            const recentActivities = activities.slice(0, 10);
+            
+            recentActivities.forEach(activity => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${activity.date}</td>
+                    <td>${activity.type}</td>
+                    <td>${activity.description || ''}</td>
+                    <td>${activity.amount.toFixed(2)} MAD</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteActivity(${activity.id}, '${activity.activityType}')" style="padding: 5px 10px; font-size: 0.8rem;">Supprimer</button>
+                    </td>
+                `;
+                activityTable.appendChild(row);
+            });
+        }
+
+        // Delete an activity
+        function deleteActivity(id, type) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette activité?')) {
+                if (type === 'expense') {
+                    expenses = expenses.filter(expense => expense.id !== id);
+                } else if (type === 'revenue') {
+                    revenues = revenues.filter(revenue => revenue.id !== id);
+                }
+                updateUI();
+                showAlert('Activité supprimée!', 'success');
+            }
+        }
+
+        // Clear all recent activities
+        function clearRecentActivities() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toutes les activités récentes?')) {
+                activities = [];
+                updateUI();
+                showAlert('Activités récentes effacées!', 'success');
+            }
+        }
+
+        // Update expenses list
+        function updateExpensesList() {
+            const expensesTable = document.getElementById('depenses-list');
+            expensesTable.innerHTML = '';
+            
+            expenses.forEach(expense => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${expense.date}</td>
+                    <td>${expense.type}</td>
+                    <td>${expense.description || ''}</td>
+                    <td>${expense.amount.toFixed(2)} MAD</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteExpense(${expense.id})">Supprimer</button>
+                    </td>
+                `;
+                expensesTable.appendChild(row);
+            });
+        }
+
+        // Update revenues list
+        function updateRevenuesList() {
+            const revenuesTable = document.getElementById('revenus-list');
+            revenuesTable.innerHTML = '';
+            
+            revenues.forEach(revenue => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${revenue.date}</td>
+                    <td>${revenue.type}</td>
+                    <td>${revenue.description || ''}</td>
+                    <td>${revenue.amount.toFixed(2)} MAD</td>
+                    <td>${revenue.paymentMethod || ''}</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteRevenue(${revenue.id})">Supprimer</button>
+                    </td>
+                `;
+                revenuesTable.appendChild(row);
+            });
+        }
+
+        // Update employees list
+        function updateEmployeesList() {
+            const employeesTable = document.getElementById('employes-list');
+            employeesTable.innerHTML = '';
+            
+            employees.forEach(employee => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${employee.lastName}</td>
+                    <td>${employee.firstName}</td>
+                    <td>${employee.position}</td>
+                    <td>${employee.salary.toFixed(2)} MAD</td>
+                    <td>${employee.hireDate}</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteEmployee(${employee.id})">Supprimer</button>
+                    </td>
+                `;
+                employeesTable.appendChild(row);
+            });
+        }
+
+        // Form submission handlers with data storage
+        document.getElementById('depense-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newExpense = {
+                id: Date.now(),
+                type: document.getElementById('depense-type').value,
+                amount: parseFloat(document.getElementById('depense-montant').value),
+                date: document.getElementById('depense-date').value,
+                description: document.getElementById('depense-description').value
+            };
+            
+            expenses.push(newExpense);
+            updateUI();
+            this.reset();
+            document.getElementById('depense-date').value = new Date().toISOString().split('T')[0];
+            
+            showAlert('Dépense ajoutée avec succès!', 'success');
+        });
+
+        document.getElementById('revenu-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newRevenue = {
+                id: Date.now(),
+                type: document.getElementById('revenu-type').value,
+                amount: parseFloat(document.getElementById('revenu-montant').value),
+                date: document.getElementById('revenu-date').value,
+                description: document.getElementById('revenu-description').value,
+                paymentMethod: document.getElementById('revenu-mode-paiement').value,
+                declared: document.getElementById('revenu-declare-fisc').checked
+            };
+            
+            revenues.push(newRevenue);
+            updateUI();
+            this.reset();
+            document.getElementById('revenu-date').value = new Date().toISOString().split('T')[0];
+            
+            showAlert('Revenu ajouté avec succès!', 'success');
+        });
+
+        document.getElementById('employe-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newEmployee = {
+                id: Date.now(),
+                lastName: document.getElementById('employe-nom').value,
+                firstName: document.getElementById('employe-prenom').value,
+                salary: parseFloat(document.getElementById('employe-salaire').value),
+                position: document.getElementById('employe-poste').value,
+                hireDate: document.getElementById('employe-date-embauche').value,
+                email: document.getElementById('employe-email').value,
+                phone: document.getElementById('employe-telephone').value
+            };
+            
+            employees.push(newEmployee);
+            updateUI();
+            this.reset();
+            document.getElementById('employe-date-embauche').value = new Date().toISOString().split('T')[0];
+            
+            showAlert('Employé ajouté avec succès!', 'success');
+        });
+
+        // Delete functions
+        function deleteExpense(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette dépense?')) {
+                expenses = expenses.filter(expense => expense.id !== id);
+                updateUI();
+                showAlert('Dépense supprimée!', 'success');
+            }
+        }
+
+        function deleteRevenue(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce revenu?')) {
+                revenues = revenues.filter(revenue => revenue.id !== id);
+                updateUI();
+                showAlert('Revenu supprimé!', 'success');
+            }
+        }
+
+        function deleteEmployee(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet employé?')) {
+                employees = employees.filter(employee => employee.id !== id);
+                updateUI();
+                showAlert('Employé supprimé!', 'success');
+            }
+        }
+
+        // Report generation
+        document.getElementById('rapport-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const reportType = document.getElementById('rapport-type').value;
+            let startDate, endDate;
+            
+            // Calculate dates based on report type
+            const today = new Date();
+            
+            if (reportType === 'personnalise') {
+                startDate = new Date(document.getElementById('rapport-date-debut').value);
+                endDate = new Date(document.getElementById('rapport-date-fin').value);
+            } else {
+                endDate = new Date(today);
+                
+                if (reportType === 'mensuel') {
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                } else if (reportType === 'trimestriel') {
+                    const quarter = Math.floor(today.getMonth() / 3);
+                    startDate = new Date(today.getFullYear(), quarter * 3, 1);
+                } else { // annuel
+                    startDate = new Date(today.getFullYear(), 0, 1);
+                }
+            }
+            
+            // Filter data for the report period
+            const periodExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return expenseDate >= startDate && expenseDate <= endDate;
+            });
+            
+            const periodRevenues = revenues.filter(r => {
+                const revenueDate = new Date(r.date);
+                return revenueDate >= startDate && revenueDate <= endDate;
+            });
+            
+            // Calculate totals
+            const totalExpenses = periodExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalRevenues = periodRevenues.reduce((sum, r) => sum + r.amount, 0);
+            const netProfit = totalRevenues - totalExpenses;
+            
+            // Generate report HTML
+            const reportResult = document.getElementById('rapport-result');
+            reportResult.innerHTML = `
+                <h3>Rapport ${getReportTypeName(reportType)} du ${formatDate(startDate)} au ${formatDate(endDate)}</h3>
+                <div class="report-actions">
+                    <button class="btn-excel" onclick="exportToExcel('${reportType}', '${formatDate(startDate)}', '${formatDate(endDate)}')">Exporter en Excel</button>
+                </div>
+                <div class="dashboard-cards">
+                    <div class="card revenus">
+                        <h3>Total Revenus</h3>
+                        <p>${totalRevenues.toFixed(2)} MAD</p>
+                    </div>
+                    <div class="card depenses">
+                        <h3>Total Dépenses</h3>
+                        <p>${totalExpenses.toFixed(2)} MAD</p>
+                    </div>
+                    <div class="card">
+                        <h3>Bénéfice Net</h3>
+                        <p>${netProfit.toFixed(2)} MAD</p>
+                    </div>
+                </div>
+                
+                <h4>Détails des Revenus</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Montant (MAD)</th>
+                            <th>Mode Paiement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${periodRevenues.map(r => `
+                            <tr>
+                                <td>${r.date}</td>
+                                <td>${r.type}</td>
+                                <td>${r.description || ''}</td>
+                                <td>${r.amount.toFixed(2)}</td>
+                                <td>${r.paymentMethod || ''}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <h4>Détails des Dépenses</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Montant (MAD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${periodExpenses.map(e => `
+                            <tr>
+                                <td>${e.date}</td>
+                                <td>${e.type}</td>
+                                <td>${e.description || ''}</td>
+                                <td>${e.amount.toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            showAlert('Rapport généré avec succès!', 'success');
+        });
+
+        // Export to Excel function
+        function exportToExcel(reportType, startDate, endDate) {
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Filter data for the report period
+            const periodExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                return expenseDate >= start && expenseDate <= end;
+            });
+            
+            const periodRevenues = revenues.filter(r => {
+                const revenueDate = new Date(r.date);
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                return revenueDate >= start && revenueDate <= end;
+            });
+            
+            // Prepare data for Excel
+            const expenseData = periodExpenses.map(e => ({
+                Date: e.date,
+                Type: e.type,
+                Description: e.description || '',
+                Montant: e.amount,
+                Devise: 'MAD'
+            }));
+            
+            const revenueData = periodRevenues.map(r => ({
+                Date: r.date,
+                Type: r.type,
+                Description: r.description || '',
+                Montant: r.amount,
+                'Mode Paiement': r.paymentMethod || '',
+                'Déclaré Fiscalement': r.declared ? 'Oui' : 'Non',
+                Devise: 'MAD'
+            }));
+            
+            // Calculate totals
+            const totalExpenses = periodExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalRevenues = periodRevenues.reduce((sum, r) => sum + r.amount, 0);
+            const netProfit = totalRevenues - totalExpenses;
+            
+            const summaryData = [{
+                'Total Revenus': totalRevenues,
+                'Total Dépenses': totalExpenses,
+                'Bénéfice Net': netProfit,
+                Devise: 'MAD'
+            }];
+            
+            // Create worksheets
+            const wsSummary = XLSX.utils.json_to_sheet(summaryData);
+            const wsRevenues = XLSX.utils.json_to_sheet(revenueData);
+            const wsExpenses = XLSX.utils.json_to_sheet(expenseData);
+            
+            // Add worksheets to workbook
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Résumé");
+            XLSX.utils.book_append_sheet(wb, wsRevenues, "Revenus");
+            XLSX.utils.book_append_sheet(wb, wsExpenses, "Dépenses");
+            
+            // Generate Excel file
+            const reportName = `Rapport_${reportType}_${startDate}_${endDate}.xlsx`;
+            XLSX.writeFile(wb, reportName);
+            
+            showAlert('Rapport exporté en Excel!', 'success');
+        }
+
+        // Translation functions
+        function translateToArabic() {
+            // This would use Google Translate API in a real implementation
+            // For demo purposes, we'll just show an alert
+            alert("Traduction en arabe - Cette fonctionnalité utiliserait l'API Google Translate dans une implémentation réelle");
+            
+            // In a real implementation, you would:
+            // 1. Detect all text elements on the page
+            // 2. Send them to Google Translate API
+            // 3. Replace the text with translated versions
+            // 4. Switch text direction to RTL for Arabic
+        }
+
+        function translateToFrench() {
+            // Reset to original French version
+            alert("Retour à la version française");
+            
+            // In a real implementation, you would:
+            // 1. Reset all text to original French
+            // 2. Switch text direction back to LTR
+        }
+
+        // Helper functions
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function getReportTypeName(type) {
+            const types = {
+                'mensuel': 'Mensuel',
+                'trimestriel': 'Trimestriel',
+                'annuel': 'Annuel',
+                'personnalise': 'Personnalisé'
+            };
+            return types[type] || '';
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Set today's date as default for date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('depense-date').value = today;
+            document.getElementById('revenu-date').value = today;
+            document.getElementById('employe-date-embauche').value = today;
+            document.getElementById('rapport-date-debut').value = today;
+            document.getElementById('rapport-date-fin').value = today;
+            
+            // Handle date range visibility based on report type
+            document.getElementById('rapport-type').addEventListener('change', function() {
+                const dateRangeGroup = document.getElementById('date-range-group');
+                if (this.value === 'personnalise') {
+                    dateRangeGroup.style.display = 'block';
+                } else {
+                    dateRangeGroup.style.display = 'none';
+                }
+            });
+        });
+       // Save data to database
+async function saveDataToDB() {
+    const data = {
+        expenses: expenses,
+        revenues: revenues,
+        employees: employees
+    };
+
+    try {
+        const response = await fetch('http://localhost:3001/api/saveData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        console.log('Data saved:', result);
+        showAlert('Data saved successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving data:', error);
+        showAlert('Error saving data!', 'error');
+    }
+}
+
+// Load data from database
+async function loadDataFromDB() {
+    try {
+        const response = await fetch('http://localhost:3001/api/loadData');
+        const data = await response.json();
+        
+        if(data.expenses) expenses = data.expenses;
+        if(data.revenues) revenues = data.revenues;
+        if(data.employees) employees = data.employees;
+        
+        updateUI();
+        console.log('Data loaded successfully');
+        showAlert('Data loaded successfully!', 'success');
+    } catch (error) {
+        console.error('Error loading data:', error);
+        showAlert('Error loading data!', 'error');
+    }
+}
+
+// Add to your existing DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    
+    // Add these lines
+    loadDataFromDB();
+    
+    // Save data when leaving the page
+    window.addEventListener('beforeunload', saveDataToDB);
+    
+    // Optional: Add a manual save button
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'btn-success';
+    saveBtn.textContent = 'Save Data';
+    saveBtn.style.position = 'fixed';
+    saveBtn.style.bottom = '20px';
+    saveBtn.style.right = '20px';
+    saveBtn.onclick = saveDataToDB;
+    document.body.appendChild(saveBtn);
+});
+    </script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'fr',
+                includedLanguages: 'fr,ar,en,es', // Langues disponibles
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+            
+            // Masquer le dropdown Google par défaut et utiliser nos styles
+            const googleDropdown = document.querySelector('.goog-te-combo');
+            if(googleDropdown) {
+                googleDropdown.style.display = 'none';
+            }
+        }
+        
+        // Fonctions pour changer la langue programmatiquement
+        function changeLanguage(lang) {
+            const select = document.querySelector('.goog-te-combo');
+            if(select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            } else {
+                // Fallback si le widget n'est pas encore chargé
+                setTimeout(() => changeLanguage(lang), 500);
+            }
+        }
+        
+        // Optionnel: Ajouter des boutons personnalisés si besoin
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vous pouvez garder vos boutons existants mais avec les nouvelles fonctions
+            // Ou laisser juste le widget Google
+        });
+        </script>
+         <script>
+        const API_BASE_URL = window.location.origin; // Automatically uses Heroku URL
+
+        // Replace your existing saveDataToDB and loadDataFromDB with:
+        async function saveDataToDB() {
+            const data = {
+                expenses: expenses,
+                revenues: revenues,
+                employees: employees
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/saveData`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                console.log('Data saved:', result);
+                showAlert('Data saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showAlert('Error saving data!', 'error');
+            }
+        }
+
+        async function loadDataFromDB() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/loadData`);
+                const data = await response.json();
+                
+                if(data.expenses) expenses = data.expenses;
+                if(data.revenues) revenues = data.revenues;
+                if(data.employees) employees = data.employees;
+                
+                updateUI();
+                console.log('Data loaded successfully');
+                showAlert('Data loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showAlert('Error loading data!', 'error');
+            }
+        }
+
+        // Add this to your DOMContentLoaded event:
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDataFromDB(); // Auto-load data on startup
+            
+            // Save data periodically (every 5 minutes)
+            setInterval(saveDataToDB, 300000);
+            
+            // Save data when closing the page
+            window.addEventListener('beforeunload', saveDataToDB);
+        });
+    </script>
+</body>
+</html>
